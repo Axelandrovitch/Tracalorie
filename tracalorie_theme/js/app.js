@@ -16,6 +16,7 @@ class CalorieTracker {
   addMeal(meal) {
     this._meals.push(meal);
     this._totalCalories += meal.calories;
+    this._displayNewMeal(meal);
     this._render();
   }
 
@@ -23,6 +24,7 @@ class CalorieTracker {
     this._workouts.push(workout);
     this._totalCalories -= workout.calories;
     this._render();
+    this._displayNewWorkout(workout);
   }
 
   //Private Methods
@@ -84,6 +86,47 @@ class CalorieTracker {
     progressEl.style.width = `${width}%`;
   }
 
+  _displayNewMeal(meal) {
+    const mealsEl = document.querySelector("#meal-items");
+    const mealEl = document.createElement("div");
+    mealEl.classList.add("card", "my-2");
+    mealEl.setAttribute("data-id", meal.id);
+    mealEl.innerHTML = `<div class="card-body">
+    <div class="d-flex align-items-center justify-content-between">
+      <h4 class="mx-1">${meal.name}</h4>
+      <div
+        class="fs-1 bg-primary text-white text-center rounded-2 px-2 px-sm-5"
+      >
+       ${meal.calories} 
+      </div>
+      <button class="delete btn btn-danger btn-sm mx-2">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>`;
+    mealsEl.appendChild(mealEl);
+  }
+
+  _displayNewWorkout(workout) {
+    const workoutsEl = document.querySelector("#workout-items");
+    const workoutEl = document.createElement("div");
+    workoutEl.classList.add("card", "my-2");
+    workoutEl.setAttribute("data-id", workout.id);
+    workoutEl.innerHTML = `<div class="card-body">
+    <div class="d-flex align-items-center justify-content-between">
+      <h4 class="mx-1">${workout.name}</h4>
+      <div
+        class="fs-1 bg-secondary text-white text-center rounded-2 px-2 px-sm-5"
+      >
+       ${workout.calories} 
+      </div>
+      <button class="delete btn btn-danger btn-sm mx-2">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+  </div>`;
+    workoutsEl.appendChild(workoutEl);
+  }
   _render() {
     this._displayCaloriesTotal();
     this._displayCaloriesConsumed();
