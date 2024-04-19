@@ -27,6 +27,27 @@ class CalorieTracker {
     this._displayNewWorkout(workout);
   }
 
+  removeMeal(id) {
+    const index = this._meals.findIndex((meal) => meal.id === id);
+    if (index !== -1) {
+      const meal = this._meals[index];
+      this._meals.splice(index, 1);
+      this._totalCalories -= meal.calories;
+      this._render();
+      this._displayCaloriesTotal();
+    }
+  }
+  removeWorkout(id) {
+    const index = this._workouts.findIndex((workout) => workout.id === id);
+    if (index !== -1) {
+      const workout = this._workouts[index];
+      this._workouts.splice(index, 1);
+      this._totalCalories += workout.calories;
+      this._render();
+      this._displayCaloriesTotal();
+    }
+  }
+
   //Private Methods
 
   _displayCaloriesTotal() {
@@ -160,6 +181,12 @@ class App {
     document
       .querySelector("#workout-form")
       .addEventListener("submit", this._newWorkout.bind(this));
+    document
+      .querySelector("#meal-items")
+      .addEventListener("click", this._removeMeal.bind(this));
+    document
+      .querySelector("#workout-items")
+      .addEventListener("click", this._removeWorkout.bind(this));
   }
 
   _newMeal(e) {
@@ -194,6 +221,32 @@ class App {
       });
     } else {
       alert("Please enter a valid name and calorie amount");
+    }
+  }
+
+  _removeMeal(e) {
+    if (
+      e.target.classList.contains("delete") ||
+      e.target.classList.contains("fa-xmark")
+    ) {
+      if (confirm("Are you sure?")) {
+        const id = e.target.closest(".card").getAttribute("data-id");
+        this._tracker.removeMeal(id);
+        e.target.closest(".card").remove();
+      }
+    }
+  }
+
+  _removeWorkout(e) {
+    if (
+      e.target.classList.contains("delete") ||
+      e.target.classList.contains("fa-xmark")
+    ) {
+      if (confirm("Are you sure?")) {
+        const id = e.target.closest(".card").getAttribute("data-id");
+        this._tracker.removeWorkout(id);
+        e.target.closest(".card").remove();
+      }
     }
   }
 }
